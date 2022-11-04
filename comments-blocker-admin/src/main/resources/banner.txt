@@ -1,0 +1,7 @@
+${AnsiBackground.WHITE}${AnsiColor.BRIGHT_RED}       _      ${AnsiColor.BRIGHT_WHITE}   _
+${AnsiBackground.WHITE}${AnsiColor.BRIGHT_RED}      |_|     ${AnsiColor.BRIGHT_WHITE}  (_)                      _
+${AnsiBackground.WHITE}${AnsiColor.BRIGHT_WHITE} _${AnsiColor.BRIGHT_YELLOW} _ _| |  ${AnsiColor.BRIGHT_WHITE} ___  _  ___  ____  ____ ____| |_
+${AnsiBackground.WHITE}${AnsiColor.BRIGHT_WHITE}| ${AnsiColor.BRIGHT_YELLOW}| | |  \ ${AnsiColor.BRIGHT_WHITE}/ _ \| |/___)/ _  |/ ___) _  |  _)
+${AnsiBackground.WHITE}${AnsiColor.BRIGHT_WHITE}| ${AnsiColor.BRIGHT_YELLOW}| | | | |${AnsiColor.BRIGHT_WHITE} |_| | |___ ( ( | ( (__( ( | | |__
+${AnsiBackground.WHITE}${AnsiColor.BRIGHT_WHITE} \${AnsiColor.BRIGHT_YELLOW}____|_|_|${AnsiColor.BRIGHT_WHITE}\___/|_(___/ \_||_|\____)_||_|\___)
+${AnsiColor.DEFAULT}${AnsiBackground.DEFAULT}
