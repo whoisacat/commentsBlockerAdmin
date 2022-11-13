@@ -12,7 +12,8 @@ class IpBlockAction(id: Long? = null,
     blockPeriod: BlockPeriod = BlockPeriod.FOREVER,
     user: User,
     userExclude: User? = null,
-    record: IpRecord) {
+    record: IpRecord,
+    @Column(name = "is_synchronised", nullable = false) var isSynchronized: Boolean = false) {
 
     @Id
     @SequenceGenerator(name = "ip_block_actions_seq",
@@ -36,7 +37,6 @@ class IpBlockAction(id: Long? = null,
 
     @Column(name = "is_active", nullable = false)
     var isActive: Boolean = isActive
-        private set
 
     @Enumerated(EnumType.STRING)
     @Column(name = "block_period", nullable = false)
@@ -49,7 +49,6 @@ class IpBlockAction(id: Long? = null,
 
     @ManyToOne(fetch = FetchType.EAGER)
     var userExclude: User? = userExclude
-        set
 
     @ManyToOne
     var record: IpRecord = record

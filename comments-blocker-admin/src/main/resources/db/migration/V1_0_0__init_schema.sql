@@ -15,6 +15,21 @@ create table heartbeat (
 
 ALTER SEQUENCE public.heartbeat_seq OWNED BY public.heartbeat.id;
 
+create sequence public.heartbeat_fu_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+create table heartbeat_fu (
+                           id int8 not null,
+                           heartbeat timestamp not null,
+                           primary key (id)
+);
+
+ALTER SEQUENCE public.heartbeat_fu_seq OWNED BY public.heartbeat_fu.id;
+
 create sequence public.ip_block_actions_seq
     START WITH 1
     INCREMENT BY 1
@@ -31,6 +46,7 @@ create table ip_block_actions (
                                   record_id int8,
                                   user_id int8,
                                   user_exclude_id int8,
+                                  is_synchronised boolean not null default false,
                                   primary key (id)
 );
 

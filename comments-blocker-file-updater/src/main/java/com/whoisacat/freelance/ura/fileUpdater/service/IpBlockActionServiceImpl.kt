@@ -4,6 +4,7 @@ import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import com.whoisacat.freelance.ura.fileUpdater.repository.IpBlockActionRepository
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
@@ -26,6 +27,15 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
 
     override fun getActivePage(pageRequest: Pageable): Page<IpBlockAction> {
         return repository.findAllByIsActiveIsTrueOrderByStartTimeDesc(pageRequest)
+    }
+
+    override fun getNotSynchronizedPage(pageRequest: PageRequest, act: Action): Page<IpBlockAction> {
+        return when (act) {
+            Action.ADD ->  repository
+                .getPageByIsSynchronizedIsFalseAndEndTimeIsNullOrderByStartTimeDesc(pageRequest)
+            Action.REMOVE -> repository
+                .getPageByIsSynchronizedIsFalseAndEndTimeIsNotNullOrderByStartTimeDesc(pageRequest)
+        }
     }
 
     override fun getNotActivePage(pageRequest: Pageable): Page<IpBlockAction> {

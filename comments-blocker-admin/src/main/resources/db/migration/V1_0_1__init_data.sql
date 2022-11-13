@@ -33,21 +33,21 @@ insert into ip_records (id, ip, country, city)
         (16,'85.140.119.162','Россия','Екатеринбург');
 ALTER SEQUENCE ip_record_seq RESTART WITH 17;
 
-INSERT INTO ip_block_actions (id, start_time, end_time, is_active, block_period, user_id, record_id)
-    VALUES (1, '2022-10-28 16:21:00',null,true,'FOREVER',1,1),
-           (2, '2022-10-28 16:22:00',null,true,'FOREVER',1,2),
-           (3, '2022-10-28 16:23:00',null,true,'FOREVER',1,3),
-           (4, '2022-10-28 16:24:00',null,true,'FOREVER',1,4),
-           (5, '2022-10-28 16:25:00',null,true,'FOREVER',1,5),
-           (6, '2022-10-28 16:26:00',null,true,'FOREVER',1,6),
-           (7, '2022-10-28 16:27:00',null,true,'FOREVER',1,7),
-           (8, '2022-10-28 16:28:00',null,true,'FOREVER',1,8),
-           (9, '2022-10-28 16:29:00',null,true,'FOREVER',1,9),
-           (10, '2022-10-28 16:30:00',null,true,'FOREVER',1,10),
-           (11, '2022-10-28 16:31:00',null,true,'FOREVER',1,11),
-           (12, '2022-10-28 16:32:00',null,true,'FOREVER',1,12),
-           (13, '2022-10-28 16:33:00',null,true,'FOREVER',1,13),
-           (14, '2022-10-28 16:34:00',null,true,'FOREVER',1,14),
-           (15, '2022-10-28 16:35:00',null,true,'FOREVER',1,15),
-           (16, '2022-10-28 16:36:00',null,true,'FOREVER',1,16);
+INSERT INTO ip_block_actions (id, start_time, end_time, is_active, block_period, user_id, record_id, is_synchronised)
+    VALUES (1, '2022-10-28 16:21:00',null,true,'FOREVER',1,1, true),
+           (2, '2022-10-28 16:22:00',null,true,'FOREVER',1,2, true),
+           (3, '2022-10-28 16:23:00',null,true,'FOREVER',1,3, true),
+           (4, '2022-10-28 16:24:00',null,true,'FOREVER',1,4, true),
+           (5, '2022-10-28 16:25:00',null,true,'FOREVER',1,5, true),
+           (6, '2022-10-28 16:26:00',null,true,'FOREVER',1,6, true),
+           (7, '2022-10-28 16:27:00',null,true,'FOREVER',1,7, true),
+           (8, '2022-10-28 16:28:00',null,true,'FOREVER',1,8, true),
+           (9, '2022-10-28 16:29:00',null,true,'FOREVER',1,9, true),
+           (10, '2022-10-28 16:30:00',null,true,'FOREVER',1,10, true),
+           (11, '2022-10-28 16:31:00',null,true,'FOREVER',1,11, true),
+           (12, '2022-10-28 16:32:00',null,true,'FOREVER',1,12, true),
+           (13, '2022-10-28 16:33:00',null,true,'FOREVER',1,13, true),
+           (14, '2022-10-28 16:34:00',null,true,'FOREVER',1,14, true),
+           (15, '2022-10-28 16:35:00',null,true,'FOREVER',1,15, true),
+           (16, '2022-10-28 16:36:00',null,true,'FOREVER',1,16, true);
 ALTER SEQUENCE ip_block_actions_seq RESTART WITH 17;
