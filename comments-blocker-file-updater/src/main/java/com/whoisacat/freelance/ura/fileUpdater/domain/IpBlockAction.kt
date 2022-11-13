@@ -11,7 +11,8 @@ class IpBlockAction(id: Long? = null,
     endTime: LocalDateTime? = null,
     isActive: Boolean = true,
     blockPeriod: BlockPeriod = BlockPeriod.FOREVER,
-    record: IpRecord) {
+    record: IpRecord,
+    isSynchronized: Boolean) {
 
     @Id
     @SequenceGenerator(name = "ip_block_actions_seq",
@@ -45,4 +46,8 @@ class IpBlockAction(id: Long? = null,
     @ManyToOne
     var record: IpRecord = record
         private set
+
+    @Column(name = "is_synchronised", nullable = false)
+    var isSynchronized: Boolean = isSynchronized
+        set
 }

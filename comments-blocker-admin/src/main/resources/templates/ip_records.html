@@ -72,7 +72,7 @@
                                required th:value="${ips.ipToBlock}"
                                maxlength="15" autofocus height="30" placeholder="Заблокировать IP">
                         <select class= "input" name="blockPeriod">
-                            <option th:each="blockPeriod : ${T(com.whoisacat.freelance.ura.fileUpdater.domain.BlockPeriod).values()}"
+                            <option th:each="blockPeriod : ${T(com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.BlockPeriod).values()}"
                                     th:value="${blockPeriod}" th:text="${blockPeriod.displayValue}"></option>
                         </select>
                         <input class= "input" type="submit" value="Заблокировать" height="20"/>
