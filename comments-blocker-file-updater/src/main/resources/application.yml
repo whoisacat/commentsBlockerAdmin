@@ -55,7 +55,7 @@ com:
   whoisacat:
     commentsBlocker:
       service:
-        fileName: /home/whoisacat/Projects/own/commentsBlockerAdmin/comments-blocker-file-updater/file.txt
+        fileName: ./temp/file.txt
         fileUpdatePeriod: 5
       health:
         heartbeat:
