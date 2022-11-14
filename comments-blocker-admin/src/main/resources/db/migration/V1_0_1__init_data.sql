@@ -8,7 +8,7 @@ ALTER SEQUENCE user_seq RESTART WITH 2;
 INSERT INTO public.who_role (id,role_name,who_user_id) VALUES
                                                            (1,'ROLE_USER',1),
                                                            (2,'ROLE_ADMIN',1);
-ALTER SEQUENCE who_role_seq RESTART WITH 2;
+ALTER SEQUENCE who_role_seq RESTART WITH 3;
 
 INSERT INTO public.user_settings (id,rows_per_page,user_id) VALUES
     (1,3,1);

@@ -1,8 +1,11 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.controller
 
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.ROLES
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.dto.IpRecordInfoDTO
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.dto.MainPageDTO
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.IpRecordService
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.UserSettingsService
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.UserNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
@@ -21,7 +24,12 @@ class IpRecordsController(private val service: IpRecordService,
         val ips: Page<IpRecordInfoDTO> =
             service.findList(PageRequest.of(page,
                 userSettingsService.getUserSettings().rowsPerPage), text)
-        model.addAttribute("ips", ips)
+        val isAdmin = userSettingsService.getUserSettings().user
+            ?.run {
+                roles.stream().anyMatch { ROLES.ROLE_ADMIN == it.roleName }
+            } ?: false
+        val dto = MainPageDTO(isAdmin, ips)
+        model.addAttribute("dto", dto)
         return "ip_records"
     }
 
