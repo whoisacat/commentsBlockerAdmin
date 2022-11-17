@@ -6,8 +6,7 @@ import java.io.*
 
 
 @Service
-class IOServiceLocal(
-    @Value("\${com.whoisacat.commentsBlocker.service.fileName}") val fileName: String)
+class IOServiceLocal(@Value("\${com.whoisacat.commentsBlocker.service.fileName}") val fileName: String)
     : IOService {
 
     override fun appendLine(string: String) {

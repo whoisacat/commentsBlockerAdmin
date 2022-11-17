@@ -25,6 +25,7 @@ class UserServiceImpl(
 ) : UserService {
 
     @Throws(UserAlreadyExistException::class)
+    @Transactional
     override fun registerNewUserAccount(userRegistrationDto: UserRegistrationDTO): User {
         if (emailExist(userRegistrationDto.email))
             throw UserAlreadyExistException(userRegistrationDto.email)
@@ -41,6 +42,7 @@ class UserServiceImpl(
         return newUser
     }
 
+    @Transactional(readOnly = true)
     private fun emailExist(email: String): Boolean {
         return repository.existsByEmail(email)
     }
@@ -63,6 +65,7 @@ class UserServiceImpl(
         return EditUserDTO(user.firstName, user.lastName, user.email!!, "readonly")
     }
 
+    @Transactional
     override fun save(user: User): User {
         return repository.save<User>(user)
     }

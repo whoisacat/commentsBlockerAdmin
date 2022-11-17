@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
@@ -48,23 +49,28 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
         }
     }
 
+    @Transactional(readOnly = true)
     override fun findPageByUser(pageRequest: PageRequest, text: String): Page<IpBlockAction> {
         return repository
             .findPageByUser_FirstNameContainsOrUser_LastNameContains(text, text, pageRequest)
     }
 
+    @Transactional(readOnly = true)
     override fun findActivePageByIpRecordsIds(ids: List<Long>, pageRequest: Pageable): Page<IpBlockAction> {
         return repository.findPageByIsActiveIsTrueAndRecord_IdIsIn(ids, pageRequest)
     }
 
+    @Transactional(readOnly = true)
     override fun findPageByIpRecordsIds(ids: List<Long>, pageRequest: Pageable): Page<IpBlockAction> {
         return repository.findPageByRecord_IdIsIn(ids, pageRequest)
     }
 
+    @Transactional
     override fun save(action: IpBlockAction): IpBlockAction {
         return repository.save(action)
     }
 
+    @Transactional
     override fun blockIp(ip: String, blockPeriod: BlockPeriod) {
         var record = recordsService.getOneByIp(ip) ?: IpRecord(ip = ip)
         when (record.id) {
@@ -83,6 +89,7 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
         }
     }
 
+    @Transactional
     override fun unblockIp(id: Long) {
         val action = repository.getOneById(id) ?: throw IpBlockActionNotFoundException()
         action.apply {
@@ -93,10 +100,12 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
         save (action)
     }
 
+    @Transactional(readOnly = true)
     override fun getPage(pageRequest: Pageable): Page<IpBlockAction> {
         return repository.findAllByIsActiveIsTrueOrderByStartTimeDesc(pageRequest)
     }
 
+    @Transactional(readOnly = true)
     override fun getNotActivePage(pageRequest: Pageable): Page<IpBlockAction> {
         return repository.getAllByOrderByStartTimeDesc(pageRequest)
     }

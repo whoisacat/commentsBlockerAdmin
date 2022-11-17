@@ -8,11 +8,11 @@ import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 import kotlin.text.StringBuilder
 
-private const val pageSize = 4
+private const val pageSize = 4 //todo вынести в проперти
 
 @Service
 class FileUpdaterService(private val blockActionService: IpBlockActionService,
-    private val ioService: IOService) {
+                         private val ioService: IOService) {
 
     @Scheduled(fixedRateString = "\${com.whoisacat.commentsBlocker.service.fileUpdatePeriod}",
         initialDelay = 0, timeUnit = TimeUnit.MINUTES)

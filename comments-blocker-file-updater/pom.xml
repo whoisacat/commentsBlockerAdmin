@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.whoisacat.freelance.ura</groupId>
 		<artifactId>comments-blocker</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath></relativePath> <!-- lookup parent from repository -->
+		<version>0.0.1</version>
+		<relativePath>..</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.whoisacat.freelance.ura</groupId>
-	<artifactId>comments-blocker-file-updater</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>updater</artifactId>
+	<version>0.0.1</version>
 	<name>comments-blocker 02 file updater</name>
 	<description>Update blocked commentators IPs list</description>
 	<properties>

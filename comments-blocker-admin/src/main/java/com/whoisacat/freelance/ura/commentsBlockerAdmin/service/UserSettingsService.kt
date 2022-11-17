@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class UserSettingsService(private val repository: UserSettingsRepository,
     private val userService: UserService) {
 
@@ -18,6 +17,7 @@ class UserSettingsService(private val repository: UserSettingsRepository,
         return repository.findByUserEmail(username) ?: throw UserSettingsNotFound()
     }
 
+    @Transactional
     fun setRowsPerPage(rowsPerPage: Int = 10) {
         val username = userService.getUsernameFromSecurityContext()
         val userSettings = repository.findByUserEmail(username)
@@ -26,6 +26,7 @@ class UserSettingsService(private val repository: UserSettingsRepository,
         repository.save(userSettings)
     }
 
+    @Transactional
     fun create(user: User?) {
         val userSettings = UserSettings()
         userSettings.user = user

@@ -61,14 +61,17 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
         }
     }
 
+    @Transactional(readOnly = true)
     override fun getOneByIp(ip: String): IpRecord? {
         return repository.getOneByIp(ip)
     }
 
+    @Transactional(readOnly = true)
     override fun getOneById(id: Long): IpRecord? {
         return repository.getOneById(id)
     }
 
+    @Transactional
     override fun save(record: IpRecord): IpRecord {
         return repository.save(record)
     }
@@ -92,6 +95,7 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
                 .append(blockAction.userExclude?.firstName?:"").toString())
     }
 
+    @Transactional(readOnly = true)
     override fun getActionsPage(pageRequest: PageRequest, text: String?): Page<IpRecordInfoDTO> {
         return when {
             (text != null) && text.trim().isNotEmpty() -> {
@@ -118,6 +122,7 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
         }
     }
 
+    @Transactional
     override fun update(genre: IpRecord): IpRecord {
         return repository.save(genre)
     }

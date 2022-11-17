@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.whoisacat.freelance.ura</groupId>
 		<artifactId>comments-blocker</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath></relativePath>
+		<version>0.0.1</version>
+		<relativePath>..</relativePath>
 <!--		<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
 	</parent>
 	<groupId>com.whoisacat.freelance.ura</groupId>
-	<artifactId>comments-blocker-admin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>admin</artifactId>
+	<version>0.0.1</version>
 	<name>comments-blocker 01 admin</name>
 	<description>Project for blocking commentators IPs</description>
 	<properties>
