@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://127.0.0.1:5432/comments_blocker_admin_db}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/comments_blocker_admin_db}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     platform: postgresql
