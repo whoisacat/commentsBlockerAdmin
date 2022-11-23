@@ -1,5 +1,6 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
+import com.whoisacat.freelance.ura.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -11,5 +12,5 @@ interface IpBlockActionService {
     fun save(action: IpBlockAction): IpBlockAction
     fun getActivePage(pageRequest: Pageable): Page<IpBlockAction>
     fun getNotActivePage(pageRequest: Pageable): Page<IpBlockAction>
-    fun getNotSynchronizedPage(pageSize: PageRequest, add: Action): Page<IpBlockAction>
+    fun getNotSynchronizedPage(pageRequest: PageRequest, act: Action): Page<IpBlockAction>
 }

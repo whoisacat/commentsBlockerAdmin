@@ -1,8 +1,9 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
+import com.whoisacat.freelance.ura.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import com.whoisacat.freelance.ura.fileUpdater.repository.IpBlockActionRepository
-import org.springframework.context.annotation.Lazy
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
-    @Lazy private val recordsService: IpRecordService)
+@ConditionalOnProperty(value = ["com.whoisacat.commentsBlocker.service.use"], havingValue = "db")
+class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository)
     : IpBlockActionService {
 
     @Transactional(readOnly = true)

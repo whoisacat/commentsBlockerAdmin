@@ -1,15 +1,19 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.service
 
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.config.KafkaConfig
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.BlockPeriod
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpBlockAction
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpRecord
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.repository.IpBlockActionRepository
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionAlreadyExistException
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionNotFoundException
+import com.whoisacat.freelance.ura.dto.Action
+import com.whoisacat.freelance.ura.dto.IpActionMessage
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,9 +22,11 @@ import java.util.concurrent.TimeUnit
 
 @Service
 class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
-    @Lazy private val recordsService: IpRecordService,
-    val userService: UserService)
+                               @Lazy private val recordsService: IpRecordService,
+                               val userService: UserService,
+                               private val kafkaTemplateMessage: KafkaTemplate<String, IpActionMessage>? = null)
     : IpBlockActionService {
+
 
     @Scheduled(fixedRate = 1, initialDelay = 1, timeUnit = TimeUnit.MINUTES)
     fun checkIfEnd() {
@@ -45,6 +51,8 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
                 isSynchronized = false
                 endTime = LocalDateTime.now()
                 save(this)
+                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!,Action.REMOVE,
+                    KafkaConfig.DELETE_IP_TOPIC)
             }
         }
     }
@@ -76,17 +84,28 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
         when (record.id) {
             null -> {
                 record = recordsService.save(record)
+                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, Action.ADD,
+                    KafkaConfig.INSERT_IP_TOPIC)
                 save(IpBlockAction(isActive = true, blockPeriod = blockPeriod,
                     user = userService.getCurrentUser(), record = record))
             }
             else -> {
                 val action = repository.getOneByRecord_IdAndIsActiveIsTrue(record.id!!)
                 if (action == null) {
+                    sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, Action.ADD,
+                        KafkaConfig.INSERT_IP_TOPIC)
                     save(IpBlockAction(isActive = true, blockPeriod = blockPeriod,
                         user = userService.getCurrentUser(), record = record))
                 } else throw IpBlockActionAlreadyExistException(ip)
             }
         }
+    }
+
+    private fun sendToKafkaIfKafkaTemplateExists(ip: String, id: Long, action: Action, topic: String) {
+        if (kafkaTemplateMessage == null) return
+        val message = IpActionMessage(ip, action)
+        val future = kafkaTemplateMessage.send(topic, id.toString(), message)
+        future.get()
     }
 
     @Transactional
@@ -97,6 +116,8 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
             isSynchronized = false
             userExclude = userService.getCurrentUser()
         }
+        sendToKafkaIfKafkaTemplateExists(action.record.ip, action.record.id!!, Action.REMOVE,
+            KafkaConfig.DELETE_IP_TOPIC)
         save (action)
     }
 

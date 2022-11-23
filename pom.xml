@@ -9,17 +9,12 @@
 
     <packaging>pom</packaging>
 
-    <name>CommentsBlocker - 00 - Parent</name>
+    <name>CommentsBlocker  00 Parent</name>
 
     <properties>
         <java.version>17</java.version>
-        <kotlin.version>1.6.21</kotlin.version>
+        <kotlin.version>1.7.21</kotlin.version>
         <springboot.version>2.7.5</springboot.version>
-<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-<!--        <java.version>11</java.version>-->
-<!--        <maven.compiler.source>11</maven.compiler.source>-->
-<!--        <maven.compiler.target>11</maven.compiler.target>-->
-<!--        <skipTests>false</skipTests>-->
     </properties>
 
     <parent>
@@ -39,11 +34,6 @@
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib-jdk8</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
 
@@ -83,6 +73,11 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>1.9.5</version>
             </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
@@ -94,6 +89,7 @@
 
     </pluginRepositories>
     <modules>
+        <module>comments-blocker-dto</module>
         <module>comments-blocker-admin</module>
         <module>comments-blocker-file-updater</module>
     </modules>

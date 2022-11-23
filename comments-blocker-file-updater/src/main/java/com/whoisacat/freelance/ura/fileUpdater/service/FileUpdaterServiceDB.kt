@@ -1,6 +1,9 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
+import com.whoisacat.freelance.ura.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.domain.PageRequest
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -8,11 +11,12 @@ import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 import kotlin.text.StringBuilder
 
-private const val pageSize = 4 //todo вынести в проперти
-
-@Service
-class FileUpdaterService(private val blockActionService: IpBlockActionService,
-                         private val ioService: IOService) {
+@Service("fileUpdaterService")
+@ConditionalOnProperty(value = ["com.whoisacat.commentsBlocker.service.use"], havingValue = "db")
+class FileUpdaterServiceDB(
+    val blockActionService: IpBlockActionService,
+    val ioService: IOService,
+    @Value("\${com.whoisacat.commentsBlocker.service.db.pageSize}") private val pageSize: Int) {
 
     @Scheduled(fixedRateString = "\${com.whoisacat.commentsBlocker.service.fileUpdatePeriod}",
         initialDelay = 0, timeUnit = TimeUnit.MINUTES)
@@ -79,8 +83,4 @@ class FileUpdaterService(private val blockActionService: IpBlockActionService,
             .peek(String::trim)
             .collect(Collectors.toList())
     }
-}
-
-enum class Action() {
-    ADD, REMOVE
 }
