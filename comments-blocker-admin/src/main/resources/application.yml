@@ -58,4 +58,4 @@ com:
         fileUpdatePeriod: 5
       health:
         heartbeat:
-          period: 100000
+          period: 1000

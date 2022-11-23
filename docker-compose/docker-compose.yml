@@ -17,10 +17,10 @@ services:
     networks:
       - comments_blocker_network
     healthcheck:
-      test: [ "CMD", "curl", "-f", "updater:8081" ]
-      interval: 30s
+      test: [ "CMD", "curl", "-f", "localhost:8081/up" ]
+      interval: 5s
       timeout: 10s
-      retries: 5
+      retries: 300
   updater:
     container_name: blocker_updater
     image: whoisacat/ura_comments_blocker_updater:test

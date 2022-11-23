@@ -2,6 +2,7 @@ FROM openjdk:17.0.1-jdk-slim as blocker_admin_app
 
 RUN apt-get --yes update
 RUN apt-get --yes install git
+RUN apt-get --yes install curl
 
 ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR

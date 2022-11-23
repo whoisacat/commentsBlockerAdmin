@@ -32,7 +32,7 @@ class SecurityConfiguration(userDetailsService: WHOUserDetailsService) : WebSecu
     override fun configure(http: HttpSecurity) {
         http.csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-            .and().authorizeRequests().antMatchers( "/swagger-ui.html", "/swagger-ui/**")
+            .and().authorizeRequests().antMatchers("/up", "/swagger-ui.html", "/swagger-ui/**")
             .permitAll()
             .and().authorizeRequests().antMatchers("/user/registration", "/monitoring/**")
             .hasRole("ADMIN")
