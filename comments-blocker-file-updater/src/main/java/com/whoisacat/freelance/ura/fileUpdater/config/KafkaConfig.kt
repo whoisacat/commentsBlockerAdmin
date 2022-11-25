@@ -17,8 +17,9 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 @Configuration
 @ConditionalOnProperty(value = ["com.whoisacat.commentsBlocker.service.use"], havingValue = "kafka")
 class KafkaConfig {
+
     @Value("\${com.whoisacat.commentsBlocker.service.kafka.groupId}")
-    private val groupId: String? = null
+    val groupId: String? = null
     private fun consumerFactoryMessage(): ConsumerFactory<String, IpActionMessage> {
         val props: MutableMap<String, Any?> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = SERVER

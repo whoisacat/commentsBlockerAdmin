@@ -1,11 +1,11 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
+import com.whoisacat.freelance.ura.fileUpdater.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.dto.IpActionMessage
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.data.domain.PageRequest
 import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.stereotype.Service
 import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
@@ -13,8 +13,8 @@ import kotlin.text.StringBuilder
 
 private const val pageSize = 4 //todo вынести в проперти
 
-class FileUpdaterServiceDB(private val blockActionService: IpBlockActionService,
-                           private val ioService: IOService) : FileUpdaterService {
+class FileUpdaterServiceDB(val blockActionService: IpBlockActionService,
+                           val ioService: IOService) : FileUpdaterService {
 
     @Scheduled(fixedRateString = "\${com.whoisacat.commentsBlocker.service.fileUpdatePeriod}",
         initialDelay = 0, timeUnit = TimeUnit.MINUTES)

@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
                                @Lazy private val recordsService: IpRecordService,
                                val userService: UserService,
-                               private val kafkaTemplateMessage: KafkaTemplate<String, IpActionMessage>
+                               val kafkaTemplateMessage: KafkaTemplate<String, IpActionMessage>
 )
     : IpBlockActionService {
 
