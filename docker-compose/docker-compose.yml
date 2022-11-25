@@ -2,7 +2,7 @@ version: '3'
 services:
   admin:
     container_name: blocker_admin
-    image: whoisacat/ura_comments_blocker_admin:appletest
+    image: whoisacat/ura_comments_blocker_admin:kafka_test
     privileged: true
     ports:
       - "8081:8081"
@@ -14,6 +14,7 @@ services:
       - WAIT_FOR=postgres:5432
     depends_on:
       - db
+      - kafka
     networks:
       - comments_blocker_network
     healthcheck:
@@ -23,7 +24,7 @@ services:
       retries: 300
   updater:
     container_name: blocker_updater
-    image: whoisacat/ura_comments_blocker_updater:appletest
+    image: whoisacat/ura_comments_blocker_updater:kafka_test
     privileged: true
     ports:
       - "8082:8082"
@@ -36,6 +37,7 @@ services:
     restart: on-failure
     depends_on:
       - admin
+      - kafka
     volumes:
       - /Users/whoisacat/Projects/own/tmp:/blocker_files
     networks:
@@ -52,22 +54,28 @@ services:
     networks:
       - comments_blocker_network
     volumes:
-      - dbdata:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.1.1
+    image: confluentinc/cp-zookeeper:7.3.0.arm64
     container_name: zookeeper-jboot
     healthcheck:
       test: "[[ $$(echo srvr | nc localhost 2181 | grep -oG 'Mode: standalone') = \"Mode: standalone\" ]]"
       interval: 10s
       timeout: 1s
       retries: 30
+    ports:
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
+    volumes:
+      - zookeeper_secrets:/etc/zookeeper/secrets
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_log:/var/lib/zookeeper/log
+    networks:
+      - comments_blocker_network
   kafka:
-    image: confluentinc/cp-kafka:6.1.1
+    image: confluentinc/cp-kafka:7.3.0.arm64
     container_name: kafka-jboot
     depends_on:
       - zookeeper
@@ -76,6 +84,10 @@ services:
       interval: 3s
       timeout: 2s
       retries: 300
+    ports:
+      - "9092:9092"
+      - "9091:9091"
+      - "9101:9101"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -87,13 +99,18 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: localhost
-    ports:
-      - "9092:9092"
-      - "9091:9091"
-      - "9101:9101"
+    networks:
+      - comments_blocker_network
+    volumes:
+      - kafka_secrets:/etc/kafka/secrets
+      - kafka_data:/var/lib/kafka/data
 networks:
   comments_blocker_network:
     driver: bridge
 volumes:
-  blocker_files:
-  dbdata:
+  db_data:
+  kafka_data:
+  kafka_secrets:
+  zookeeper_secrets:
+  zookeeper_data:
+  zookeeper_log:

@@ -29,7 +29,7 @@ class RegistrationController(private val userService: UserService) {
     ): ModelAndView {
         try {
 
-            val registered = userService.registerNewUserAccount(userRegistrationDto!!)
+            userService.registerNewUserAccount(userRegistrationDto!!)
         } catch (uaeEx: UserAlreadyExistException) {
             val mav = ModelAndView("emailError")
             mav.addObject("message", "An account for that username/email already exists.")

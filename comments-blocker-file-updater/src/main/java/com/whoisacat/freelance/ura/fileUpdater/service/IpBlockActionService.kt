@@ -11,5 +11,5 @@ interface IpBlockActionService {
     fun save(action: IpBlockAction): IpBlockAction
     fun getActivePage(pageRequest: Pageable): Page<IpBlockAction>
     fun getNotActivePage(pageRequest: Pageable): Page<IpBlockAction>
-    fun getNotSynchronizedPage(pageSize: PageRequest, add: Action): Page<IpBlockAction>
+    fun getNotSynchronizedPage(pageRequest: PageRequest, act: Action): Page<IpBlockAction>
 }
