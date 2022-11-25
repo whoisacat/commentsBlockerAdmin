@@ -4,6 +4,7 @@ import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import com.whoisacat.freelance.ura.fileUpdater.dto.Action
 
 interface IpBlockActionService {
     fun findActivePageByIpRecordsIds(ids: List<Long>, pageRequest: Pageable): Page<IpBlockAction>

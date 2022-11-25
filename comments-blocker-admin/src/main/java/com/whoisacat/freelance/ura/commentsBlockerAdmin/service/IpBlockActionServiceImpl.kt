@@ -1,6 +1,6 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.service
 
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.config.KafkaConfig
+//import com.whoisacat.freelance.ura.commentsBlockerAdmin.config.KafkaConfig
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.BlockPeriod
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpBlockAction
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpRecord
@@ -84,8 +84,8 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
             null -> {
                 record = recordsService.save(record)
                 val message = IpActionMessage(record.id!!, record.ip, Action.ADD)
-                val future = kafkaTemplateMessage.send(KafkaConfig.INSERT_IP_TOPIC, record.id!!.toString(), message)
-                future.get()
+//                val future = kafkaTemplateMessage.send(KafkaConfig.INSERT_IP_TOPIC, record.id!!.toString(), message)
+//                future.get()
                 save(IpBlockAction(isActive = true, blockPeriod = blockPeriod,
                     user = userService.getCurrentUser(), record = record))
             }
@@ -108,7 +108,7 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
             userExclude = userService.getCurrentUser()
         }
         val message = IpActionMessage(action.record.id!!, action.record.ip, Action.REMOVE)
-        kafkaTemplateMessage.send(KafkaConfig.DELETE_IP_TOPIC, action.record.id!!.toString(), message)
+//        kafkaTemplateMessage.send(KafkaConfig.DELETE_IP_TOPIC, action.record.id!!.toString(), message)
         save (action)
     }
 
