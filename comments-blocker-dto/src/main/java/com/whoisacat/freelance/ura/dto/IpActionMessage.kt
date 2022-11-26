@@ -1,7 +1,8 @@
 package com.whoisacat.freelance.ura.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class IpActionMessage(
-    var id: Long,
-    var ip: String,
-    var action: Action
+    @JsonProperty("ip") var ip: String,
+    @JsonProperty("action") var action: Action
 )

@@ -41,13 +41,13 @@ class KafkaConfig {
         return factory
     }
 
-    @Autowired lateinit var blockActionService: IpBlockActionService
     @Autowired lateinit var ioService: IOService
 
     @Bean("fileUpdaterService")
-    fun fileUpdaterService(@Value("\${com.whoisacat.commentsBlocker.service.use}") use: String?): FileUpdaterService? {
+    fun fileUpdaterService(@Value("\${com.whoisacat.commentsBlocker.service.use}") use: String?)
+    : FileUpdaterServiceKafka {
         return when (use) {
-            "kafka" -> FileUpdaterServiceKafka(blockActionService, ioService)
+            "kafka" -> FileUpdaterServiceKafka(ioService)
             else -> throw RuntimeException("determine com.whoisacat.commentsBlocker.service.use (kafka/db) in application.yml")
         }
     }

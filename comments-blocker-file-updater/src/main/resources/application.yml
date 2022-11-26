@@ -55,11 +55,13 @@ com:
   whoisacat:
     commentsBlocker:
       service:
-        fileName: /blocker_files/ip_block.txt
+        fileName: ./blocker_files/ip_block.txt
         fileUpdatePeriod: 5
         use: kafka
         kafka:
           groupId: 2
+        db:
+          pageSize: 10
       health:
         heartbeat:
           period: 1000

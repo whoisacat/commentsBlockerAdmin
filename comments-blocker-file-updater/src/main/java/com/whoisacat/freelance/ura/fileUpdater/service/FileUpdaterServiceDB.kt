@@ -1,24 +1,26 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
 import com.whoisacat.freelance.ura.dto.Action
-import com.whoisacat.freelance.ura.dto.IpActionMessage
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
-import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.domain.PageRequest
 import org.springframework.scheduling.annotation.Scheduled
-import java.lang.RuntimeException
+import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 import kotlin.text.StringBuilder
 
-private const val pageSize = 4 //todo вынести в проперти
-
-class FileUpdaterServiceDB(val blockActionService: IpBlockActionService,
-                           val ioService: IOService) : FileUpdaterService {
+@Service("fileUpdaterService")
+@ConditionalOnProperty(value = ["com.whoisacat.commentsBlocker.service.use"], havingValue = "db")
+class FileUpdaterServiceDB(
+    val blockActionService: IpBlockActionService,
+    val ioService: IOService,
+    @Value("\${com.whoisacat.commentsBlocker.service.db.pageSize}") private val pageSize: Int) {
 
     @Scheduled(fixedRateString = "\${com.whoisacat.commentsBlocker.service.fileUpdatePeriod}",
         initialDelay = 0, timeUnit = TimeUnit.MINUTES)
-    override fun removeIpsFromFile() {
+    fun removeIpsFromFile() {
         var page = blockActionService.getNotSynchronizedPage(PageRequest.of(0, pageSize),
             Action.REMOVE)
         if (page.content.isEmpty()) return
@@ -38,10 +40,6 @@ class FileUpdaterServiceDB(val blockActionService: IpBlockActionService,
         }
     }
 
-    override fun removeIpsFromFile(record: ConsumerRecord<String, IpActionMessage>) {
-        throw RuntimeException("operation not permitted")
-    }
-
     private fun replaceFromContent(ips: List<IpBlockAction>, content: String,
         list: MutableList<IpBlockAction>): String {
         var res = content
@@ -54,7 +52,7 @@ class FileUpdaterServiceDB(val blockActionService: IpBlockActionService,
 
     @Scheduled(fixedRateString = "\${com.whoisacat.commentsBlocker.service.fileUpdatePeriod}",
         initialDelay = 2, timeUnit = TimeUnit.MINUTES)
-    override fun addIpsToFile() {
+    fun addIpsToFile() {
         var page = blockActionService.getNotSynchronizedPage(PageRequest.of(0, pageSize),
             Action.ADD)
         if (page.content.isEmpty()) return

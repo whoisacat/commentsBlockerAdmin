@@ -5,6 +5,7 @@ import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
@@ -26,12 +27,14 @@ class KafkaConfig {
     }
 
     @Bean
-    fun kafkaTemplateMessage(): KafkaTemplate<String, IpActionMessage> {
+    fun kafkaTemplateMessage(@Value("\${com.whoisacat.commentsBlocker.service.use}") use: String?): KafkaTemplate<String, IpActionMessage>? {
+        if (!(use != null && use == "kafka")) return null
         return KafkaTemplate(producerFactoryMessage())
     }
 
     @Bean
-    fun kafkaAdmin(): KafkaAdmin {
+    fun kafkaAdmin(@Value("\${com.whoisacat.commentsBlocker.service.use}") use: String?): KafkaAdmin? {
+        if (!(use != null && use == "kafka")) return null
         val configs: MutableMap<String, Any> = HashMap()
         configs[AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG] = SERVER
         configs[AdminClientConfig.CLIENT_ID_CONFIG] = CLIENT_ID_CONFIG
