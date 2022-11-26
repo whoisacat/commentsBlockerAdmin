@@ -1,9 +1,9 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
+import com.whoisacat.freelance.ura.fileUpdater.dto.IpActionMessage
 import com.whoisacat.freelance.ura.fileUpdater.config.KafkaConfig.Companion.DELETE_IP_TOPIC
 import com.whoisacat.freelance.ura.fileUpdater.config.KafkaConfig.Companion.INSERT_IP_TOPIC
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
-import com.whoisacat.freelance.ura.fileUpdater.dto.IpActionMessage
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import java.lang.RuntimeException

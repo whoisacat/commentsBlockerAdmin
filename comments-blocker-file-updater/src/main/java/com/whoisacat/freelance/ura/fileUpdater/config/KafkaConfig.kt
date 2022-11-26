@@ -41,16 +41,17 @@ class KafkaConfig {
         return factory
     }
 
-    @Autowired val blockActionService: IpBlockActionService? = null
-    @Autowired val ioService: IOService? = null
+    @Autowired lateinit var blockActionService: IpBlockActionService
+    @Autowired lateinit var ioService: IOService
 
     @Bean("fileUpdaterService")
     fun fileUpdaterService(@Value("\${com.whoisacat.commentsBlocker.service.use}") use: String?): FileUpdaterService? {
         return when (use) {
-            "kafka" -> FileUpdaterServiceKafka(blockActionService!!, ioService!!)
+            "kafka" -> FileUpdaterServiceKafka(blockActionService, ioService)
             else -> throw RuntimeException("determine com.whoisacat.commentsBlocker.service.use (kafka/db) in application.yml")
         }
     }
+
     companion object {
         private const val SERVER = "localhost:9091"
         const val INSERT_IP_TOPIC = "ip.insert"

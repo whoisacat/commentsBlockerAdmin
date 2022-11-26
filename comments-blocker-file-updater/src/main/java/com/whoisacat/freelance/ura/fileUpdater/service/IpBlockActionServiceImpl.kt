@@ -1,18 +1,16 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
+import com.whoisacat.freelance.ura.fileUpdater.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import com.whoisacat.freelance.ura.fileUpdater.repository.IpBlockActionRepository
-import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import com.whoisacat.freelance.ura.fileUpdater.dto.Action
 
 @Service
-class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
-    @Lazy private val recordsService: IpRecordService)
+class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository)
     : IpBlockActionService {
 
     @Transactional(readOnly = true)

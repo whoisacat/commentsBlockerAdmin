@@ -1,14 +1,14 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.service
 
-//import com.whoisacat.freelance.ura.commentsBlockerAdmin.config.KafkaConfig
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.config.KafkaConfig
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.BlockPeriod
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpBlockAction
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpRecord
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.dto.Action
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.dto.IpActionMessage
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.repository.IpBlockActionRepository
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionAlreadyExistException
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionNotFoundException
+import com.whoisacat.freelance.ura.dto.Action
+import com.whoisacat.freelance.ura.dto.IpActionMessage
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -24,8 +24,7 @@ import java.util.concurrent.TimeUnit
 class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
                                @Lazy private val recordsService: IpRecordService,
                                val userService: UserService,
-                               val kafkaTemplateMessage: KafkaTemplate<String, IpActionMessage>
-)
+                               val kafkaTemplateMessage: KafkaTemplate<String, IpActionMessage>)
     : IpBlockActionService {
 
 
@@ -84,8 +83,8 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
             null -> {
                 record = recordsService.save(record)
                 val message = IpActionMessage(record.id!!, record.ip, Action.ADD)
-//                val future = kafkaTemplateMessage.send(KafkaConfig.INSERT_IP_TOPIC, record.id!!.toString(), message)
-//                future.get()
+                val future = kafkaTemplateMessage.send(KafkaConfig.INSERT_IP_TOPIC, record.id!!.toString(), message)
+                future.get()
                 save(IpBlockAction(isActive = true, blockPeriod = blockPeriod,
                     user = userService.getCurrentUser(), record = record))
             }
@@ -108,7 +107,9 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
             userExclude = userService.getCurrentUser()
         }
         val message = IpActionMessage(action.record.id!!, action.record.ip, Action.REMOVE)
-//        kafkaTemplateMessage.send(KafkaConfig.DELETE_IP_TOPIC, action.record.id!!.toString(), message)
+        val future = kafkaTemplateMessage.send(KafkaConfig.DELETE_IP_TOPIC, action.record.id!!.toString(), message)
+        val get = future.get()
+        println(get.toString())
         save (action)
     }
 

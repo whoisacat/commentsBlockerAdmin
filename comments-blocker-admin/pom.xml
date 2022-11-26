@@ -12,12 +12,18 @@
 	<groupId>com.whoisacat.freelance.ura</groupId>
 	<artifactId>admin</artifactId>
 	<version>0.0.1</version>
-	<name>comments-blocker 01 admin</name>
+	<name>comments-blocker 02 admin</name>
 	<description>Project for blocking commentators IPs</description>
 	<properties>
 
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>com.whoisacat.freelance.ura</groupId>
+			<artifactId>comments-blocker-dto</artifactId>
+			<version>0.0.1</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-reflect</artifactId>

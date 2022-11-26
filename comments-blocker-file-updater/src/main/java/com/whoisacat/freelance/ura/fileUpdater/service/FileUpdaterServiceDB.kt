@@ -1,8 +1,8 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
-import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import com.whoisacat.freelance.ura.fileUpdater.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.dto.IpActionMessage
+import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.data.domain.PageRequest
 import org.springframework.scheduling.annotation.Scheduled

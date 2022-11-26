@@ -1,4 +1,4 @@
-package com.whoisacat.freelance.ura.fileUpdater.dto
+package com.whoisacat.freelance.ura.dto
 
 data class IpActionMessage(
     var id: Long,
