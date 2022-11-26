@@ -1,6 +1,6 @@
 package com.whoisacat.freelance.ura.fileUpdater.config
 
-import com.whoisacat.freelance.ura.fileUpdater.dto.IpActionMessage
+import com.whoisacat.freelance.ura.dto.IpActionMessage
 import com.whoisacat.freelance.ura.fileUpdater.service.*
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer

@@ -1,6 +1,6 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
-import com.whoisacat.freelance.ura.fileUpdater.dto.Action
+import com.whoisacat.freelance.ura.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import com.whoisacat.freelance.ura.fileUpdater.repository.IpBlockActionRepository
 import org.springframework.data.domain.Page
