@@ -57,6 +57,7 @@ com:
       service:
         fileUpdatePeriod: 5
         use: kafka
+        kafkaServer: ${KAFKA_SERVER_URL:localhost:9091}
       health:
         heartbeat:
           period: 1000

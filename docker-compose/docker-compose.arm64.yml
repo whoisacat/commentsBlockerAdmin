@@ -2,7 +2,7 @@ version: '3'
 services:
   admin:
     container_name: blocker_admin
-    image: whoisacat/ura_comments_blocker_admin:kafka_test
+    image: whoisacat/ura_comments_blocker_admin:kafka_test.arm64
     privileged: true
     ports:
       - "8081:8081"
@@ -12,6 +12,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - WAIT_FOR=postgres:5432
+      - KAFKA_SERVER_URL=PLAINTEXT://kafka:9092
     depends_on:
       - db
       - kafka
@@ -24,7 +25,7 @@ services:
       retries: 300
   updater:
     container_name: blocker_updater
-    image: whoisacat/ura_comments_blocker_updater:kafka_test
+    image: whoisacat/ura_comments_blocker_updater:kafka_test.arm64
     privileged: true
     ports:
       - "8082:8082"
@@ -34,6 +35,8 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - WAIT_FOR=admin:8081
+      - KAFKA_SERVER_URL=PLAINTEXT://kafka:9092
+      - BLOCKER_FILE_NAME=/blocker_files/ip_block.txt
     restart: on-failure
     depends_on:
       - admin

@@ -18,6 +18,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 @ConditionalOnProperty(value = ["com.whoisacat.commentsBlocker.service.use"], havingValue = "kafka")
 class KafkaConfig {
 
+    @Value("\${com.whoisacat.commentsBlocker.service.kafkaServer}")
+    lateinit var SERVER: String
     @Value("\${com.whoisacat.commentsBlocker.service.kafka.groupId}")
     val groupId: String? = null
     private fun consumerFactoryMessage(): ConsumerFactory<String, IpActionMessage> {
@@ -53,7 +55,6 @@ class KafkaConfig {
     }
 
     companion object {
-        private const val SERVER = "localhost:9091"
         const val INSERT_IP_TOPIC = "ip.insert"
         const val DELETE_IP_TOPIC = "ip.delete"
     }

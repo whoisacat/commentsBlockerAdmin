@@ -51,7 +51,8 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
                 isSynchronized = false
                 endTime = LocalDateTime.now()
                 save(this)
-                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, KafkaConfig.DELETE_IP_TOPIC)
+                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!,Action.REMOVE,
+                    KafkaConfig.DELETE_IP_TOPIC)
             }
         }
     }
@@ -83,14 +84,16 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
         when (record.id) {
             null -> {
                 record = recordsService.save(record)
-                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, KafkaConfig.INSERT_IP_TOPIC)
+                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, Action.ADD,
+                    KafkaConfig.INSERT_IP_TOPIC)
                 save(IpBlockAction(isActive = true, blockPeriod = blockPeriod,
                     user = userService.getCurrentUser(), record = record))
             }
             else -> {
                 val action = repository.getOneByRecord_IdAndIsActiveIsTrue(record.id!!)
                 if (action == null) {
-                    sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, KafkaConfig.INSERT_IP_TOPIC)
+                    sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, Action.ADD,
+                        KafkaConfig.INSERT_IP_TOPIC)
                     save(IpBlockAction(isActive = true, blockPeriod = blockPeriod,
                         user = userService.getCurrentUser(), record = record))
                 } else throw IpBlockActionAlreadyExistException(ip)
@@ -98,9 +101,9 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
         }
     }
 
-    private fun sendToKafkaIfKafkaTemplateExists(ip: String, id: Long, topic: String) {
+    private fun sendToKafkaIfKafkaTemplateExists(ip: String, id: Long, action: Action, topic: String) {
         if (kafkaTemplateMessage == null) return
-        val message = IpActionMessage(ip, Action.ADD)
+        val message = IpActionMessage(ip, action)
         val future = kafkaTemplateMessage.send(topic, id.toString(), message)
         future.get()
     }
@@ -113,7 +116,8 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
             isSynchronized = false
             userExclude = userService.getCurrentUser()
         }
-        sendToKafkaIfKafkaTemplateExists(action.record.ip, action.record.id!!, KafkaConfig.DELETE_IP_TOPIC)
+        sendToKafkaIfKafkaTemplateExists(action.record.ip, action.record.id!!, Action.REMOVE,
+            KafkaConfig.DELETE_IP_TOPIC)
         save (action)
     }
 

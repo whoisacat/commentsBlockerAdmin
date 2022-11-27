@@ -1,5 +1,7 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.*
@@ -8,6 +10,7 @@ import java.io.*
 @Service
 class IOServiceLocal(@Value("\${com.whoisacat.commentsBlocker.service.fileName}") val fileName: String)
     : IOService {
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     override fun appendLine(string: String) {
         try {
@@ -16,7 +19,7 @@ class IOServiceLocal(@Value("\${com.whoisacat.commentsBlocker.service.fileName}"
             bw.flush()
             bw.close()
         } catch (ioe: IOException) {
-            println(this.javaClass.simpleName + ioe.toString())
+            logger.error(this.javaClass.simpleName + ioe.toString())
         }
     }
 
@@ -27,7 +30,7 @@ class IOServiceLocal(@Value("\${com.whoisacat.commentsBlocker.service.fileName}"
             bw.flush()
             bw.close()
         } catch (ioe: IOException) {
-            println(this.javaClass.simpleName + ioe.toString())
+            logger.error(this.javaClass.simpleName + ioe.toString())
         }
     }
 

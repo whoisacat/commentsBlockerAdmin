@@ -12,6 +12,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - WAIT_FOR=postgres:5432
+      - KAFKA_SERVER_URL=PLAINTEXT://kafka:9092
     depends_on:
       - db
       - kafka
@@ -34,6 +35,8 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - WAIT_FOR=admin:8081
+      - KAFKA_SERVER_URL=PLAINTEXT://kafka:9092
+      - BLOCKER_FILE_NAME=/blocker_files/ip_block.txt
     restart: on-failure
     depends_on:
       - admin
