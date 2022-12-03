@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список заблокированных IP</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <style type="text/css">
+        body {
+            padding: 50px;
+            horiz-align: center;
+            align-content: center;
+        }
+        .ips table, th, td {
+            width: 10%;
+            border: 1px solid black;
+        }
+        .input {
+            right: 30%;
+            width: 100%;
+            padding: 5px;
+            margin: 4px 0;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        #title {
+            text-align: left;
+            font-size: 200%;
+            font-weight: bold;
+        }
+        #footer {
+            text-align: center;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            padding: 10px;
+            background: #39b54a;
+            color: #fff;
+            width: 100%;
+        }
+    </style>
+    <script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <div style="width: 100%; left: 10%; overflow: auto;" >
+            <div>
+                <div style="width: 50vw; display: table-cell; horiz-align: left;
+                    vertical-align: top;">
+                    <span>
+                        <a href="/logout">Выйти</a>
+                    </span><p/>
+                    <span>
+                        <a href="/">Главная</a>
+                    </span><p/>
+                    <span>
+                        <a href="/history">На страницу истории</a>
+                    </span><p/>
+                    <span th:if="${dto.adminAuth}">
+                        <a href="/user/registration">Создать пользователя</a>
+                    </span>
+                    <div class="psettings" style="position: static;"></div>
+                </div>
+                <div style="width: 50vw; display: table-cell; horiz-align: right;
+                    vertical-align: top;">
+                    <div style="width: 50%; margin-left: 50%;display: inline-block; border-color: black; border-width: thick">
+                        <form action="/">
+                            <input class= "input" type="text" th:name="search_text" name="search_text"
+                                   required th:value="${dto.page.searchText}"
+                                   maxlength="15" autofocus height="30" placeholder="Поиск по заблокированным">
+                            <input class= "input" type="submit" value="Найти" height="20"/>
+                        </form>
+                        <form action="/block/on">
+                            <input class= "input" type="text" id="ip" th:name="ip" name="ip"
+                                   required th:value="${dto.page.ipToBlock}"
+                                   maxlength="15" autofocus height="30" placeholder="Заблокировать IP">
+                            <select class= "input" name="blockPeriod">
+                                <option th:each="blockPeriod : ${T(com.whoisacat.freelance.ura.domain.BlockPeriod).values()}"
+                                        th:value="${blockPeriod}" th:text="${blockPeriod.displayValue}"></option>
+                            </select>
+                            <input class= "input" type="submit" value="Заблокировать" height="20"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <span id="title">Заблокированные IP:</span>
+            <div>
+                <div>
+                    <table class="ips" align="center" width="100%"
+                           style="border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>IP</th>
+                                <th>Время блокировким</th>
+                                <th>Страна</th>
+                                <th>Город</th>
+                                <th>Период блокировки</th>
+                                <th>Действия</th>
+                                <th>Последний модератор</th>
+                            </tr>
+                        </thead>
+                        <tbody style="overflow-y:scroll;">
+                            <tr th:each="ip : ${dto.page.content}">
+                                <td th:text="${ip.ip}">127.0.0.1</td>
+                                <td th:text="${ip.startTime}">27 октября 2022</td>
+                                <td th:text="${ip.country}">Россия</td>
+                                <td th:text="${ip.city}">Екатеринбург</td>
+                                <td th:text="${ip.blockPeriod.displayValue}">Неделя</td>
+                                <td>
+                                    <span><a th:href="@{/block/off/(id=${ip.blockActionId})}"
+                                             href="edit.html">Разблокировать</a></span>
+                                    <span>&emsp;</span>
+                                </td>
+                                <td th:text="${ip.user}">Модераторов Игорь Иванович</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+    <div Страницы id="footer">
+            <span th:if="${dto.page.hasPrevious()} and ${dto.page.getPageable().getPageNumber() == 1}">
+                <a th:href="@{/(search_text=${dto.page.searchText})}" href="ip_records.html"/>Предыдущая
+            </span>
+            <span th:if="${dto.page.hasPrevious()} and ${dto.page.getPageable().getPageNumber() != 1}">
+                <a th:href="@{/(page=${dto.page.previousOrFirstPageable().getPageNumber()},search_text=${dto.page.searchText})}" href="ip_records.html"/>Предыдущая
+            </span>
+            <span style='padding-left:10px;'> </span>
+            <span th:if="${dto.page.hasNext()}">
+                <a th:href="@{/(page=${dto.page.nextPageable().getPageNumber()},search_text=${dto.page.searchText})}" href="ip_records.html"/>Следующая
+            </span>
+        </div>
+        <script>
+            $(function () {
+                $.get('/userSettings').done(function (psettings) {
+                    $(".psettings").append(`
+                        <span>
+                            <form action="/userSettings", method="POST">
+                                <span>Записей на странице: </span>
+                                <span>
+                                    <input type="number" name="rowsPerPage" value=${psettings.rowsPerPage} min="1" max="200" step="1">
+                                </span>
+                            </form>
+                        </span>
+                        <span>
+                            <button onClick="window.location.reload();">Обновить страницу</button>
+                        </span>
+                    `);
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

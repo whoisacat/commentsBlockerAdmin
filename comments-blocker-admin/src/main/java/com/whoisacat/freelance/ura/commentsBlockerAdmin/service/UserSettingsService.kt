@@ -4,6 +4,7 @@ import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.User
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.UserSettings
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.repository.UserSettingsRepository
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.UserSettingsNotFound
+import com.whoisacat.freelance.ura.dto.UserSettingsDTO
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,9 +13,10 @@ class UserSettingsService(private val repository: UserSettingsRepository,
     private val userService: UserService) {
 
     @Transactional(readOnly = true)
-    fun getUserSettings(): UserSettings {
+    fun getUserSettings(): UserSettingsDTO {
         val username = userService.getUsernameFromSecurityContext()
-        return repository.findByUserEmail(username) ?: throw UserSettingsNotFound()
+        val us: UserSettings = repository.findByUserEmail (username) ?: throw UserSettingsNotFound()
+        return UserSettingsDTO(id = us.id, rowsPerPage = us.rowsPerPage)
     }
 
     @Transactional

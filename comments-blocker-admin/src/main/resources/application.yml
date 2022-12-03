@@ -1,14 +1,15 @@
 server:
   port: 8081
 spring:
+  mvc.throw-exception-if-no-handler-found: true
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/comments_blocker_admin_db}
+    url: ${DB_URL:jdbc:postgresql://localhost:5439/comments_blocker_admin_db}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     platform: postgresql
     hikari:
-      maximum-pool-size: 60
-      minimum-idle: 60
+      maximum-pool-size: 10
+      minimum-idle: 10
     initialization-mode: always
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
@@ -50,12 +51,19 @@ management:
     root: DEBUG
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html
+    path: /api/swagger-ui.html
   api-docs:
     path: /api-docs
 com:
   whoisacat:
     commentsBlocker:
+      api-attributes:
+        protocol: ${ADMIN_API_PROTOCOL:http}
+        host: ${ADMIN_API_HOST:localhost}
+        port: ${ADMIN_API_PORT:8081}
+        front-protocol: ${FRONT_API_PROTOCOL:http}
+        front-host: ${FRONT_API_HOST:localhost}
+        front-port: ${FRONT_API_PORT:8080}
       service:
         fileUpdatePeriod: 5
         use: kafka

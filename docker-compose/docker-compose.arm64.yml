@@ -2,7 +2,7 @@ version: '3'
 services:
   admin:
     container_name: blocker_admin
-    image: whoisacat/ura_comments_blocker_admin:prometheus_test.arm64
+    image: whoisacat/ura_comments_blocker_admin:separated_front.arm64
     privileged: true
     ports:
       - "8081:8081"
@@ -13,19 +13,48 @@ services:
       - DB_PASSWORD=postgres
       - WAIT_FOR=postgres:5432
       - KAFKA_SERVER_URL=PLAINTEXT://kafka:9092
+      - ADMIN_API_PROTOCOL=http
+      - ADMIN_API_HOST=blocker.admin
+      - ADMIN_API_PORT=8081
+      - FRONT_API_PROTOCOL=http
+      - FRONT_API_HOST=blocker.admin
+      - FRONT_API_PORT=8080
     depends_on:
       - db
       - kafka
     networks:
       - comments_blocker_network
     healthcheck:
-      test: [ "CMD", "curl", "-f", "localhost:8081/up" ]
+      test: [ "CMD", "curl", "-f", "blocker.admin:8081/up" ]
+      interval: 5s
+      timeout: 10s
+      retries: 300
+  front:
+    container_name: blocker_front
+    image: whoisacat/ura_comments_blocker_front:separated_front.arm64
+    privileged: true
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMIN_API_PROTOCOL=http
+      - ADMIN_API_HOST=blocker.admin
+      - ADMIN_API_PORT=8081
+      - REDIRECT_ADMIN_API_PROTOCOL=http
+      - REDIRECT_ADMIN_API_HOST=blocker.admin
+      - REDIRECT_ADMIN_API_PORT=8081
+    depends_on:
+      - db
+      - kafka
+    networks:
+      - comments_blocker_network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "blocker.admin:8081/up" ]
       interval: 5s
       timeout: 10s
       retries: 300
   updater:
     container_name: blocker_updater
-    image: whoisacat/ura_comments_blocker_updater:prometheus_test.arm64
+    image: whoisacat/ura_comments_blocker_updater:separated_front.arm64
     privileged: true
     ports:
       - "8082:8082"
@@ -62,7 +91,7 @@ services:
     image: confluentinc/cp-zookeeper:7.3.0.arm64
     container_name: zookeeper-jboot
     healthcheck:
-      test: "[[ $$(echo srvr | nc localhost 2181 | grep -oG 'Mode: standalone') = \"Mode: standalone\" ]]"
+      test: "[[ $$(echo srvr | nc blocker.admin 2181 | grep -oG 'Mode: standalone') = \"Mode: standalone\" ]]"
       interval: 10s
       timeout: 1s
       retries: 30
@@ -71,6 +100,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_MAX_SESSION_TIMEOUT: 40000
     volumes:
       - zookeeper_secrets:/etc/zookeeper/secrets
       - zookeeper_data:/var/lib/zookeeper/data
@@ -95,13 +125,13 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9091
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://blocker.admin:9091
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_JMX_PORT: 9101
-      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_JMX_HOSTNAME: blocker.admin
       KAFKA_LOG_SEGMENT_BYTES: 102400
       KAFKA_LOG_RETENTION_HOURS: 72
       KAFKA_LOG_SEGMENT_MS: 3600000

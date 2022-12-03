@@ -1,6 +1,6 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.repository
 
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.BlockPeriod
+import com.whoisacat.freelance.ura.domain.BlockPeriod
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpBlockAction
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

@@ -13,7 +13,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <kotlin.version>1.7.21</kotlin.version>
+        <kotlin.version>1.8.21</kotlin.version>
         <springboot.version>2.7.5</springboot.version>
     </properties>
 
@@ -89,9 +89,12 @@
 
     </pluginRepositories>
     <modules>
-        <module>comments-blocker-dto</module>
+        <module>comments-blocker-core-exceptions</module>
+        <module>comments-blocker-front-common</module>
+        <module>comments-blocker-kafka-dto</module>
         <module>comments-blocker-admin</module>
         <module>comments-blocker-file-updater</module>
+        <module>comments-blocker-front</module>
     </modules>
 
     <profiles>

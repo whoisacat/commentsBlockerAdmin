@@ -1,4 +1,6 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception
 
-class UserSettingsNotFound : WHORequestClientException("userSettingsNotFound") {
+import com.whoisacat.freelance.ura.exceptions.WHOClientRequestException
+
+class UserSettingsNotFound : WHOClientRequestException("userSettingsNotFound") {
 }

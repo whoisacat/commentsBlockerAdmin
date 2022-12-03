@@ -1,6 +1,7 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.validation
 
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.dto.UserRegistrationDTO
+import com.whoisacat.freelance.ura.dto.UserRegistrationDTO
+import com.whoisacat.freelance.ura.dto.validation.PasswordMatches
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 

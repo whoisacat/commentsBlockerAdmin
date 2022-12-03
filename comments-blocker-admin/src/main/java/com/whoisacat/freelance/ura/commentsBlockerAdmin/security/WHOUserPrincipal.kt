@@ -1,7 +1,7 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.security
 
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.User
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.security.exception.WHOSecurityException
+import com.whoisacat.freelance.ura.security.exception.WHOSecurityException
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

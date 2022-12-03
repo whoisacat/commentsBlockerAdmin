@@ -1,10 +1,10 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
-import com.whoisacat.freelance.ura.dto.Action
-import com.whoisacat.freelance.ura.dto.IpActionMessage
 import com.whoisacat.freelance.ura.fileUpdater.config.KafkaConfig.Companion.DELETE_IP_TOPIC
 import com.whoisacat.freelance.ura.fileUpdater.config.KafkaConfig.Companion.INSERT_IP_TOPIC
 import com.whoisacat.freelance.ura.fileUpdater.service.exception.WHORequestClientException
+import com.whoisacat.freelance.ura.kafka.dto.Action
+import com.whoisacat.freelance.ura.kafka.dto.IpActionMessage
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

@@ -1,6 +1,5 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
@@ -13,7 +12,6 @@ class UserSettings {
     @Column(name = "rowsPerPage")
     var rowsPerPage: Int = 10
 
-    @JsonIgnore
     @JoinColumn
     @OneToOne
     var user: User? = null

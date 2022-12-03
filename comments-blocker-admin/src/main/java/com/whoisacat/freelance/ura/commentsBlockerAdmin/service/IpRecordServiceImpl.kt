@@ -2,12 +2,11 @@ package com.whoisacat.freelance.ura.commentsBlockerAdmin.service
 
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpBlockAction
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpRecord
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.dto.IpRecordInfoDTO
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.dto.WHOPageImpl
+import com.whoisacat.freelance.ura.dto.IpRecordInfoDTO
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.repository.IpRecordRepository
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.WHODataAccessException
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.WHOIpAlreadyExists
-import org.springframework.data.domain.Page
+import com.whoisacat.freelance.ura.exceptions.WHODataAccessException
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.WHOIpAlreadyExistsRequest
+import com.whoisacat.freelance.ura.dto.IpRecordInfoDTOPageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -27,7 +26,7 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
             return genres[0]
         }
         if (genres.size > 1) {
-            throw WHOIpAlreadyExists()
+            throw WHOIpAlreadyExistsRequest()
         }
         val ipRecord = IpRecord(null, ip, city = null)
         val id = repository.save(ipRecord).id ?: throw WHODataAccessException("didNtSaved")
@@ -35,7 +34,7 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
     }
 
     @Transactional(readOnly = true)
-    override fun findList(pageRequest: PageRequest, text: String?): Page<IpRecordInfoDTO> {
+    override fun findList(pageRequest: PageRequest, text: String?): IpRecordInfoDTOPageImpl {
         return when {
             text != null && text.trim().isNotEmpty() -> {
                 val ips = repository.findByIpContaining(text, pageRequest)
@@ -48,15 +47,15 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
                         blockActionService.findActivePageByIpRecordsIds(ids, pageRequest)
                     }
                 }
-                WHOPageImpl<IpRecordInfoDTO>(actions.stream()
+                IpRecordInfoDTOPageImpl(actions.stream()
                     .map {toDTO(it)}.collect(Collectors.toList()),
-                    pageRequest, actions.totalElements, text)
+                    pageRequest.pageNumber, pageRequest.pageSize, actions.totalElements, text)
             }
             else -> {
                 val page = blockActionService.getPage(pageRequest)
-                WHOPageImpl<IpRecordInfoDTO>(page
-                    .stream().map { toDTO(it) }.toList(),
-                    pageRequest, page.totalElements, "")
+                IpRecordInfoDTOPageImpl(resultList = page.stream().map { toDTO(it) }.toList(),
+                    pageNumber = pageRequest.pageNumber, pageSize = pageRequest.pageSize,
+                    total = page.totalElements, searchText = "")
             }
         }
     }
@@ -96,7 +95,7 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
     }
 
     @Transactional(readOnly = true)
-    override fun getActionsPage(pageRequest: PageRequest, text: String?): Page<IpRecordInfoDTO> {
+    override fun getActionsPage(pageRequest: PageRequest, text: String?): IpRecordInfoDTOPageImpl {
         return when {
             (text != null) && text.trim().isNotEmpty() -> {
                 val ips = repository.findByIpContaining(text, pageRequest)
@@ -109,21 +108,21 @@ class IpRecordServiceImpl(private val repository: IpRecordRepository,
                         blockActionService.findPageByIpRecordsIds(ids, pageRequest)
                     }
                 }
-                WHOPageImpl<IpRecordInfoDTO>(actions.stream()
-                    .map {toDTO(it)}.collect(Collectors.toList()),
-                    pageRequest, actions.totalElements, text)
+                IpRecordInfoDTOPageImpl(resultList = actions.stream().map {toDTO(it)}.toList(),
+                    pageNumber = pageRequest.pageNumber, pageSize = pageRequest.pageSize,
+                    total = actions.totalElements, searchText = text)
             }
             else -> {
                 val page = blockActionService.getNotActivePage(pageRequest)
-                WHOPageImpl<IpRecordInfoDTO>(page
-                    .stream().map { toDTO(it) }.toList(),
-                    pageRequest, page.totalElements, "")
+                IpRecordInfoDTOPageImpl(resultList = page.stream().map { toDTO(it) }.toList(),
+                    pageNumber = pageRequest.pageNumber, pageSize = pageRequest.pageSize,
+                    total = page.totalElements, searchText = "")
             }
         }
     }
 
     @Transactional
-    override fun update(genre: IpRecord): IpRecord {
-        return repository.save(genre)
+    override fun update(ipRecord: IpRecord): IpRecord {
+        return repository.save(ipRecord)
     }
 }

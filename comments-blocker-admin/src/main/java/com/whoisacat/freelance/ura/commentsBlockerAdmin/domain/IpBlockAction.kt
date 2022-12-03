@@ -1,19 +1,20 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.domain
 
+import com.whoisacat.freelance.ura.domain.BlockPeriod
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "ip_block_actions")
 class IpBlockAction(id: Long? = null,
-    startTime: LocalDateTime = LocalDateTime.now(),
-    endTime: LocalDateTime? = null,
-    isActive: Boolean = true,
-    blockPeriod: BlockPeriod = BlockPeriod.FOREVER,
-    user: User,
-    userExclude: User? = null,
-    record: IpRecord,
-    @Column(name = "is_synchronised", nullable = false) var isSynchronized: Boolean = false) {
+                    startTime: LocalDateTime = LocalDateTime.now(),
+                    endTime: LocalDateTime? = null,
+                    isActive: Boolean = true,
+                    blockPeriod: BlockPeriod = BlockPeriod.FOREVER,
+                    user: User,
+                    userExclude: User? = null,
+                    record: IpRecord,
+                    @Column(name = "is_synchronised", nullable = false) var isSynchronized: Boolean = false) {
 
     @Id
     @SequenceGenerator(name = "ip_block_actions_seq",

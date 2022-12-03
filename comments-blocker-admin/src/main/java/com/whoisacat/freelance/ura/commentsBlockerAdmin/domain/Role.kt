@@ -1,5 +1,6 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.domain
 
+import com.whoisacat.freelance.ura.domain.ROLES
 import javax.persistence.*
 
 @Entity

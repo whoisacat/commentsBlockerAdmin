@@ -1,14 +1,14 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.service
 
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.config.KafkaConfig
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.BlockPeriod
+import com.whoisacat.freelance.ura.domain.BlockPeriod
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpBlockAction
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.domain.IpRecord
 import com.whoisacat.freelance.ura.commentsBlockerAdmin.repository.IpBlockActionRepository
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionAlreadyExistException
-import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionNotFoundException
-import com.whoisacat.freelance.ura.dto.Action
-import com.whoisacat.freelance.ura.dto.IpActionMessage
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionAlreadyExistRequestException
+import com.whoisacat.freelance.ura.commentsBlockerAdmin.service.exception.IpBlockActionNotFoundRequestException
+import com.whoisacat.freelance.ura.kafka.dto.Action
+import com.whoisacat.freelance.ura.kafka.dto.IpActionMessage
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -51,7 +51,7 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
                 isSynchronized = false
                 endTime = LocalDateTime.now()
                 save(this)
-                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!,Action.REMOVE,
+                sendToKafkaIfKafkaTemplateExists(record.ip, record.id!!, Action.REMOVE,
                     KafkaConfig.DELETE_IP_TOPIC)
             }
         }
@@ -96,7 +96,7 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
                         KafkaConfig.INSERT_IP_TOPIC)
                     save(IpBlockAction(isActive = true, blockPeriod = blockPeriod,
                         user = userService.getCurrentUser(), record = record))
-                } else throw IpBlockActionAlreadyExistException(ip)
+                } else throw IpBlockActionAlreadyExistRequestException(ip)
             }
         }
     }
@@ -110,7 +110,7 @@ class IpBlockActionServiceImpl(private val repository: IpBlockActionRepository,
 
     @Transactional
     override fun unblockIp(id: Long) {
-        val action = repository.getOneById(id) ?: throw IpBlockActionNotFoundException()
+        val action = repository.getOneById(id) ?: throw IpBlockActionNotFoundRequestException()
         action.apply {
             endTime = LocalDateTime.now()
             isSynchronized = false

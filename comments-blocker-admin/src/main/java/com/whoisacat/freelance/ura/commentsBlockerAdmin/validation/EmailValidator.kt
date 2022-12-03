@@ -1,5 +1,6 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.validation
 
+import com.whoisacat.freelance.ura.dto.validation.ValidEmail
 import java.util.regex.Pattern
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext

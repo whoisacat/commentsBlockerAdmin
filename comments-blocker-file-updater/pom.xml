@@ -11,14 +11,20 @@
 	<groupId>com.whoisacat.freelance.ura</groupId>
 	<artifactId>updater</artifactId>
 	<version>0.0.1</version>
-	<name>comments-blocker 03 file updater</name>
+	<name>comments-blocker 05 file updater</name>
 	<description>Update blocked commentators IPs list</description>
 	<properties>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.whoisacat.freelance.ura</groupId>
-			<artifactId>comments-blocker-dto</artifactId>
+			<artifactId>comments-blocker-front-common</artifactId>
+			<version>0.0.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.whoisacat.freelance.ura</groupId>
+			<artifactId>comments-blocker-kafka-dto</artifactId>
 			<version>0.0.1</version>
 			<scope>compile</scope>
 		</dependency>

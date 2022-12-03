@@ -1,8 +1,8 @@
 #!/bin/sh
 
-COUNT=$(cat ./docker-compose.arm64.yml | grep -c "Путь_до_папки")
+COUNT=$(cat ./docker-compose.arm64.yml | grep -c "Путь_до_папки_c_заблокированными_ip")
 if [ $COUNT -gt 0 ]; then
-    echo "Замените Путь_до_папки в docker-compose.yml на ваш путь"
+    echo "Замените Путь_до_папки_c_заблокированными_ip в docker-compose.yml на ваш путь"
     exit 1
 fi
 COUNT=$(cat ./docker-compose.arm64.yml | grep -c "Путь_до_конфига")

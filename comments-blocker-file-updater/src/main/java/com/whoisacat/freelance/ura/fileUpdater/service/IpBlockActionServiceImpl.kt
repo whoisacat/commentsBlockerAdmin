@@ -1,8 +1,8 @@
 package com.whoisacat.freelance.ura.fileUpdater.service
 
-import com.whoisacat.freelance.ura.dto.Action
 import com.whoisacat.freelance.ura.fileUpdater.domain.IpBlockAction
 import com.whoisacat.freelance.ura.fileUpdater.repository.IpBlockActionRepository
+import com.whoisacat.freelance.ura.kafka.dto.Action
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
