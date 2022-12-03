@@ -1,6 +1,6 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.config
 
-import com.whoisacat.freelance.ura.dto.IpActionMessage
+import com.whoisacat.freelance.ura.kafka.dto.IpActionMessage
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.clients.producer.ProducerConfig

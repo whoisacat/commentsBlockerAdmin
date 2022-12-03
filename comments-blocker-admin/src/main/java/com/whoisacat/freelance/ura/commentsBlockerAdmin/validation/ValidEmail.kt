@@ -1,5 +1,6 @@
 package com.whoisacat.freelance.ura.commentsBlockerAdmin.validation
 
+import com.whoisacat.freelance.ura.dto.validation.EmailValidator
 import java.lang.annotation.Documented
 import javax.validation.Constraint
 import kotlin.reflect.KClass
