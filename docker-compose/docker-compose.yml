@@ -110,6 +110,26 @@ services:
     volumes:
       - kafka_secrets:/etc/kafka/secrets
       - kafka_data:/var/lib/kafka/data
+  prometheus:
+    image: prom/prometheus:v2.41.0
+    container_name: blocker_prometheus
+    depends_on:
+      - admin
+    ports:
+      - "9090:9090"
+    networks:
+      - comments_blocker_network
+    volumes:
+      - Путь_до_конфига:/etc/prometheus/
+  grafana:
+    image: grafana/grafana:9.3.2
+    container_name: blocker_grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3001:3000"
+    networks:
+      - comments_blocker_network
 networks:
   comments_blocker_network:
     driver: bridge
